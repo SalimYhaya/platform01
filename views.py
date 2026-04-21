@@ -18,3 +18,16 @@ def send_otp(request):
             [email],
         )
         return redirect('verify_otp_page')
+
+def set_alert(request, company_id):
+    if request.method == "POST":
+        target = request.POST.get('target_price')
+        company = Company.objects.get(id=company_id)
+        
+        # حفظ التنبيه في قاعدة البيانات
+        PriceAlert.objects.create(
+            user=request.user,
+            company=company,
+            target_price=target
+        )
+        return render(request, 'success_alert.html')
